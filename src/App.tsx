@@ -38,7 +38,7 @@ function App() {
 
   return (
     <Container maxWidth="lg">
-    <Header sections={[]} title={'Someone Says'} />
+    <Header sections={[{title: 'Game', url: '', selected: true}, {title: 'Stats', url: ''}]} title={'MimiC.'} />
       <Stack>
         <Game buttons={buttons}/>
       </Stack>

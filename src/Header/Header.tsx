@@ -9,6 +9,7 @@ interface HeaderProps {
   sections: ReadonlyArray<{
     title: string;
     url: string;
+    selected?: boolean;
   }>;
   title: string;
 }
@@ -39,7 +40,7 @@ export default function Header(props: HeaderProps) {
       <Toolbar
         component="nav"
         variant="dense"
-        sx={{ justifyContent: 'space-between', overflowX: 'auto' }}
+        sx={{ justifyContent: 'center', overflowX: 'auto' }}
       >
         {sections.map((section) => (
           <Link
@@ -48,7 +49,15 @@ export default function Header(props: HeaderProps) {
             key={section.title}
             variant="body2"
             href={section.url}
-            sx={{ p: 1, flexShrink: 0 }}
+            sx={{ 
+                p: 1, 
+                flexShrink: 0, 
+                fontWeight: section.selected ? 'bold' : 'normal', 
+                textDecorationThickness: section.selected ? '2px' : '1px',
+                '&:hover': {
+                    color: section.selected ? 'primary.dark' : 'primary.light',
+                },
+            }}
           >
             {section.title}
           </Link>
