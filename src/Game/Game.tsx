@@ -24,11 +24,11 @@ function Game({buttons}: GameProps) {
 	const [gameStatus, setGameStatus] = useState<GameStatus>(GameStatus.START);
 	const [longestCorrectSequence, setLongestCorrectSequence] = useState<number>(0);
 
-	// Evaluate color input sequence on change
+	// Evaluate full color input sequence
 	useEffect(() => {
-		if (shouldCheckMatch(colorInputSequence, colorPromptSequence)) {
-			// Check match after input sequence is the same length as prompt sequence
-			if (isMatch(colorInputSequence, colorPromptSequence)) {
+		// Check for full sequence match after input sequence is the same length as prompt sequence
+		if (shouldCheckSequence(colorInputSequence, colorPromptSequence)) {
+			if (isSequenceMatch(colorInputSequence, colorPromptSequence)) {
 				// Update score
 				setLongestCorrectSequence(colorInputSequence.length);
 				// Set next color prompt
@@ -45,6 +45,7 @@ function Game({buttons}: GameProps) {
 	// Set color prompt sequence on game status change
 	useEffect(() => {
 		if (gameStatus === GameStatus.GAME_OVER) {
+			// Reset sequence trackers
 			setColorPromptSequence([]);
 			setColorInputSequence([]);
 		}
@@ -57,10 +58,16 @@ function Game({buttons}: GameProps) {
 		}
 	}, [gameStatus]);
 
-	// Get game input from user
+	// Get game input from user & validate
 	function handleButtonClick(colorHex: string) {
 		if (gameStatus === GameStatus.PLAYING) {
-			setColorInputSequence(prev => [...prev, colorHex]);
+			const sequence = [...colorInputSequence, colorHex];
+			// Check that partial input sequence is matching prompt sequence
+			if (isPartialMatch(sequence, colorPromptSequence)) {
+				setColorInputSequence(sequence);
+			} else {
+				setGameStatus(GameStatus.GAME_OVER);
+			}
 		}
 	}
 
@@ -101,28 +108,28 @@ function getRandomButtonColor(buttons: GameButtonProps[]) {
 /*
  * Returns true if the input sequence matches the prompt sequence
 */
-function isMatch(colorInputSequence: string[], colorPromptSequence: string[]) {
+function isSequenceMatch(colorInputSequence: string[], colorPromptSequence: string[]) {
 	return JSON.stringify(colorInputSequence) === JSON.stringify(colorPromptSequence);
+}
+
+/*
+ * Returns true if the input sequence matches the prompt sequence up to the input sequence length
+*/
+function isPartialMatch(colorInputSequence: string[], colorPromptSequence: string[]) {
+	for (let i = 0; i < colorInputSequence.length; i++) {
+		if (colorInputSequence[i] !== colorPromptSequence[i]) {
+			return false;
+		}
+	}
+	return true;
 }
 
 /*
  * Returns true if the input sequence is greater than 0 and is the same length as the prompt sequence
 */
-function shouldCheckMatch(colorInputSequence: string[], colorPromptSequence: string[]) {
+function shouldCheckSequence(colorInputSequence: string[], colorPromptSequence: string[]) {
 	return colorInputSequence.length > 0 && colorInputSequence.length >= colorPromptSequence.length;
 }
-
-// function getScore(colorInputSequence: string[], colorPromptSequence: string[]) {
-// 	let score = 0;
-// 	for (let i = 0; i < colorInputSequence.length; i++) {
-// 		if (colorInputSequence[i] === colorPromptSequence[i]) {
-// 			score++;
-// 		} else {
-// 			break;
-// 		}
-// 	}
-// 	return score;
-// }
 
 export default Game;
 export { GameStatus };
