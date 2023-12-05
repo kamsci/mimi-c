@@ -1,32 +1,46 @@
 import { useState, useEffect } from "react";
+import { GameStatus } from "./Game";
 // Lib Components
 import { Box } from "@mui/material";
 
 interface GamePromptProps {
   colorSequence: string[];
+  changeGameStatus: (gameStatus: GameStatus) => void;
 }
 
 const startingColor = 'none';
 
-function GamePrompt({colorSequence}: GamePromptProps) {
+function GamePrompt({colorSequence, changeGameStatus}: GamePromptProps) {
   const [colorHex, setColorHex] = useState<string>(startingColor);
 
+  /* On color sequence change:
+    * Change game status to SHOWING
+    * Create list of timers
+    * For each color in sequence:
+    * 	Add 2 timers to flash next color
+    * Add last timer to change game status to PLAYING after all colors are shown
+    * Finally, clear all timers on unmount
+    */
   useEffect(() => {
-    // Create timers for each color in sequence
+    changeGameStatus(GameStatus.SHOWING);
     const timers: any[] = [];
+
     colorSequence.forEach((color, index) => {
-      // Time
       const time = 1000 * index;
-      // Set between color
+
       timers.push(setTimeout(() => {
         setColorHex(startingColor);
       }, time));
-      // Set new color after every 1 second * index
-       timers.push(setTimeout(() => {
+
+      timers.push(setTimeout(() => {
         setColorHex(color);
       }, time + 500));
     });
-    // Clear timers on unmount
+
+    timers.push(setTimeout(() => {
+      changeGameStatus(GameStatus.PLAYING);
+    } , 1000 * colorSequence.length));
+
     return () => {
       timers.forEach((timer) => {
         clearTimeout(timer);

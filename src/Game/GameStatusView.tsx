@@ -22,21 +22,21 @@ function GameStatusView({
 }: GameStatusViewProps) {
 
     const setStatusPlay = () => { 
-        changeGameStatus(GameStatus.PLAYING);
+        changeGameStatus(GameStatus.START);
     }
 
     switch (gameStatus) {
-        case GameStatus.START:
+        case GameStatus.INACTIVE:
             return <Button sx={{border: '1px solid #ddd'}} onClick={setStatusPlay}>Start</Button>;
-        case GameStatus.PLAYING:
-            return <GamePrompt colorSequence={colorPromptSequence}/>;
         case GameStatus.GAME_OVER:
             return (
                 <Stack spacing={1} alignItems={'center'}>
                 <GameStats score={score} />
-                <Button sx={{border: '1px solid #ddd'}} onClick={setStatusPlay}>Restart?</Button>
+                <Button sx={{border: '1px solid #ddd'}} onClick={setStatusPlay}>New Game?</Button>
                 </Stack>
             );
+        default:
+            return <GamePrompt colorSequence={colorPromptSequence} changeGameStatus={changeGameStatus} />;
     }
 }
 
