@@ -1,9 +1,12 @@
-import * as React from 'react';
+import {Fragment, useContext} from 'react';
+// Lib Components
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+// Custom Context
+import { SnackbarContext } from '../Context/SnackbarContext';
 
 interface HeaderProps {
   sections: ReadonlyArray<{
@@ -17,10 +20,16 @@ interface HeaderProps {
 export default function Header(props: HeaderProps) {
   const { sections, title } = props;
 
+  // Snackbar Context
+  const { openSnackbar } = useContext<any>(SnackbarContext);
+
   return (
-    <React.Fragment>
+    <Fragment>
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Button size="small">Subscribe</Button>
+        <Button 
+          size="small"
+          onClick={() => openSnackbar({ message: 'Subscribe coming soon!' })}
+        >Subscribe</Button>
         <Typography
           component="h2"
           variant="h5"
@@ -33,9 +42,11 @@ export default function Header(props: HeaderProps) {
         </Typography>
         <IconButton>
         </IconButton>
-        <Button variant="outlined" size="small">
-          Sign up
-        </Button>
+        <Button 
+          variant="outlined" 
+          size="small"             
+          onClick={() => openSnackbar({ message: 'User functionality coming soon!' })}
+        >Sign up</Button>
       </Toolbar>
       <Toolbar
         component="nav"
@@ -48,10 +59,11 @@ export default function Header(props: HeaderProps) {
             noWrap
             key={section.title}
             variant="body2"
-            href={section.url}
+            onClick={() => openSnackbar({ message: 'Functionality coming soon!' })}
             sx={{ 
                 p: 1, 
                 flexShrink: 0, 
+                cursor: 'pointer',
                 fontWeight: section.selected ? 'bold' : 'normal', 
                 textDecorationThickness: section.selected ? '2px' : '1px',
                 '&:hover': {
@@ -63,6 +75,6 @@ export default function Header(props: HeaderProps) {
           </Link>
         ))}
       </Toolbar>
-    </React.Fragment>
+    </Fragment>
   );
 }

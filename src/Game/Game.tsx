@@ -5,7 +5,7 @@ import GameBoard, { GameButtonProps} from "./GameBoard";
 import Stack from '@mui/material/Stack';
 import Divider from "@mui/material/Divider";
 import GameStatusView from "./GameStatusView";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 
 
 interface GameProps {
@@ -113,9 +113,11 @@ function Game({buttons}: GameProps) {
 			alignItems={'center'}
 			divider={<Divider orientation="horizontal" flexItem />}
 		>
-			<p className="read-the-docs">
+			<Box>
+				<p className="read-the-docs">
 					Click on the box that matches the color prompt in order. Each time you match the sequence, the sequence will extend.
-			</p>
+				</p>
+			</Box>
 			<Box sx={{height: '100px'}}>
 				<GameStatusView 
 					colorPromptSequence={colorPromptSequence}

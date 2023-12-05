@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 // Components
 import Header from './Header/Header';
 import Game, {GameButtonProps} from './Game';
+import CustomSnackbar from './Global/CustomSnackbar';
 // Styles
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -38,10 +39,11 @@ function App() {
 
   return (
     <Container maxWidth="lg">
-    <Header sections={[{title: 'Game', url: '', selected: true}, {title: 'Stats', url: ''}]} title={'MimiC.'} />
-      <Stack>
-        <Game buttons={buttons}/>
-      </Stack>
+      <CustomSnackbar />
+      <Header sections={[{title: 'Game', url: '', selected: true}, {title: 'Stats', url: ''}]} title={'MimiC.'} />
+        <Stack>
+          <Game buttons={buttons}/>
+        </Stack>
     </Container>
   )
 }
