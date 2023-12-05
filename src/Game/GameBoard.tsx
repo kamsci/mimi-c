@@ -1,8 +1,7 @@
 // Components
 import Grid from '@mui/material/Unstable_Grid2';
-// import div from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
-import Container from '@mui/material/Container';
 
 interface GameButtonProps {
   /** The color to display inside the button */
@@ -20,13 +19,14 @@ interface GameBoardProps {
 
 function GameBoard({buttons, handleButtonClick}: GameBoardProps) {
     return (
-      <Container maxWidth="sm">
+      <Box>
         <Grid 
           container 
           rowSpacing={0} 
           columnSpacing={0}
           sx={{
             '--Grid-borderWidth': '1px',
+            '--Grid-width': '100%',
             borderTop: 'var(--Grid-borderWidth) solid',
             borderLeft: 'var(--Grid-borderWidth) solid',
             borderColor: 'divider',
@@ -40,14 +40,14 @@ function GameBoard({buttons, handleButtonClick}: GameBoardProps) {
           {buttons && buttons.map((button, index) => {
             const style = {
               color: button.colorHex,
-              fontSize: '5vw',
+              fontSize: '2.5em',
               opacity: button.disabled ? 0.5 : 1,
-              height: '7em',
+              height: '100%',
               width: '100%',
             };
             
             return (
-              <Grid xs={6} key={index}>
+              <Grid xs={6} key={index} minHeight={150}>
                 <ButtonBase 
                   onClick={() => handleButtonClick(button.colorHex)} 
                   style={style}
@@ -58,7 +58,7 @@ function GameBoard({buttons, handleButtonClick}: GameBoardProps) {
             )
           })}
         </Grid> 
-      </Container>
+      </Box>
     );
 }
 

@@ -49,6 +49,8 @@ function Game({buttons}: GameProps) {
 			setColorInputSequence([]);
 		}
 		if (gameStatus === GameStatus.PLAYING) {
+			// Reset score
+			setLongestCorrectSequence(0);
 			// Initialize first color prompt onload
 			const nextColor = getRandomButtonColor(buttons);
 			setColorPromptSequence((prev) => [...prev, nextColor]);
@@ -57,7 +59,9 @@ function Game({buttons}: GameProps) {
 
 	// Get game input from user
 	function handleButtonClick(colorHex: string) {
-		setColorInputSequence(prev => [...prev, colorHex]);
+		if (gameStatus === GameStatus.PLAYING) {
+			setColorInputSequence(prev => [...prev, colorHex]);
+		}
 	}
 
 	function changeGameStatus(status: GameStatus) {
